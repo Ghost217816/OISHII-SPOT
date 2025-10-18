@@ -1,0 +1,12 @@
+.logo{
+    height: 100px;
+}
+
+/* Робимо фон */
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('https://i.postimg.cc/y8vLTsJM/background-image-for.png');
+  background-size: cover;        /* Розтягує на весь екран *
+
+}
