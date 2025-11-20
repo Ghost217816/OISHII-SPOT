@@ -1,20 +1,84 @@
-.logo{
-    height: 100px;
+.logo {
+  height: 100px;
 }
 
 /* Робимо фон */
 body {
   margin: 0;
   padding: 0;
-  background-image: url('https://i.postimg.cc/y8vLTsJM/background-image-for.png');
-
+  background-image: url("https://i.postimg.cc/y8vLTsJM/background-image-for.png");
+  background-size: cover; /* розтягнути на весь екран */
+  background-position: center; /* центрувати */
+  background-repeat: no-repeat; /* без повтору */
+  background-attachment: fixed;
 }
 
-.products-list{
+.products-list {
   margin-top: 40px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 20px;
+}
 
+.card-buy,
+.cart-item-price {
+  font-weight: 600;
+}
+
+.card-weight {
+  position: relative;
+  left: 90%;
+}
+
+.btn-primary,
+.cart-btn,
+.confirm-order-btn {
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid #b02a23;
+  background-color: #c93229;
+  color: aliceblue;
+  font-weight: 500;
+}
+
+.cart {
+  padding: 10px;
+  background-color: rgba(234, 227, 217, 0.514);
+}
+
+.order {
+  padding: 10px;
+  display: none;
+  background-color: rgb(234, 227, 217);
+  color: #000;
+  font-size: 18px;
+  width: 50%;
+}
+
+.cart-text {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.cart-items-list {
+}
+
+.cart-page {
+  padding-top: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-outline-success {
+  width: 100px;
+  font-size: 30px;
+}
+
+.btn-outline-success:hover {
+  background-color: #c93229;
+  border: none;
+  font-size: 40px;
+  transition: 0.5s;
 }

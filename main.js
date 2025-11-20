@@ -17,27 +17,28 @@ function getCookieValue(cookieName) {
   return "";
 }
 
-
 // Оголошуємо асинхронну функцію для отримання продуктів з сервера
 async function getProducts() {
-    // Виконуємо запит до файлу "store_db.json" та очікуємо на відповідь
-    let response = await fetch("store.json")
-    // Очікуємо на отримання та розпакування JSON-даних з відповіді
-    let products = await response.json()
-    // Повертаємо отримані продукти
-    return products
-};
+  // Виконуємо запит до файлу "store_db.json" та очікуємо на відповідь
+  let response = await fetch("store.json");
+  // Очікуємо на отримання та розпакування JSON-даних з відповіді
+  let products = await response.json();
+  // Повертаємо отримані продукти
+  return products;
+}
 
 function getCardHTML(product) {
-    return `
+  return `
     <div class="card" style="width: 18rem;">
   <img src="img/${product.image}" class="card-img-top" alt="...">
   <div class="card-body">
-    <p class="card-weight">${product.weight}</p>
+    <p class="card-weight">${product.weight} г </p>
     <h5 class="card-title">${product.title}</h5>
-    <p class="card-text">${product.filling}</p>
-    <p class="card-buy">${product.price}</p>
-    <a href="#" class="btn btn-primary" data-prodact='${JSON.stringify(product)}'>Додати в кошик</a>
+    <p class="card-text">Склад: ${product.filling}</p>
+    <p class="card-buy">Ціна: ${product.price} грн </p>
+    <a href="#" class="btn btn-primary" data-product='${JSON.stringify(
+      product
+    )}'>Додати в кошик</a>
   </div>
 </div>`;
 }
@@ -52,7 +53,7 @@ getProducts().then(function (products) {
   }
 
   // Отримуємо всі кнопки "Купити" на сторінці
-  let buyButtons = document.querySelectorAll(".products-list .cart-btn");
+  let buyButtons = document.querySelectorAll(".products-list .btn-primary");
   // Навішуємо обробник подій на кожну кнопку "Купити"
   if (buyButtons) {
     buyButtons.forEach(function (button) {
@@ -60,7 +61,6 @@ getProducts().then(function (products) {
     });
   }
 });
-
 
 // Створення класу кошика
 class ShoppingCart {
@@ -102,6 +102,11 @@ class ShoppingCart {
     }
     return total;
   }
+
+  clearCart() {
+    this.items = {}; // очищаємо об'єкт кошика
+    document.cookie = "cart=; max-age=0; path=/"; // видаляємо кукі
+  }
 }
 
 // Створення об'єкта кошика
@@ -118,23 +123,30 @@ function addToCart(event) {
   console.log(cart);
 }
 
-//КОРЗИНА
 let cart_list = document.querySelector(".cart-items-list");
 let cart_total = document.querySelector(".cart-total");
 let orderBtn = document.querySelector("#orderBtn");
+let deleteBtn = document.querySelector("#deleteBtn");
 let orderSection = document.querySelector(".order");
-let cartBtn = document.querySelector(".cart-btn1");
-
+let orderForm = document.querySelector(".order-form");
+let confirmBtn = document.querySelector(".confirm-order-btn");
 function get_item(item) {
-  return `<div class = "cart-item">
-                <h4 class="cart-item-title">${item.title}</h4>
-                <div class="cart-item-quantity">Кількість: ${
-                  item.quantity
-                }</div>
+  return `<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="img/${item.image}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">${item.title}</h5>
+          <div class="cart-item-quantity">Кількість: ${item.quantity}</div>
                 <div class="cart-item-price" data-price="${item.price}">${
     item.price * item.quantity
   } грн</div>
-            </div>`;
+      </div>
+    </div>
+  </div>
+</div>`;
 }
 
 function showCartList() {
@@ -151,15 +163,20 @@ showCartList();
 orderBtn.addEventListener("click", function (event) {
   orderBtn.style.display = "none";
   orderSection.style.display = "block";
-  anime({
-    targets: ".order",
-    opacity: 1, // Кінцева прозорість (1 - повністю видимий)
-    duration: 1000, // Тривалість анімації в мілісекундах
-    easing: "easeInOutQuad",
-  });
 });
 
-cartBtn.addEventListener("click", function () {
-  alert("Ваше замовлення прийнято, очікуйте на дзівнок менеджера ");
-  orderSection.reset();
+confirmBtn.addEventListener("click", function () {
+  if (orderForm.checkValidity()) {
+    alert(
+      "Ваше замовлення успішно оформлено! Наш менеджер незабаром зв'яжеться з вами!"
+    );
+    orderForm.reset();
+  } else {
+    orderForm.reportValidity();
+  }
+});
+
+deleteBtn.addEventListener("click", function () {
+  document.cookie = "cart=; max-age=0; path=/";
+  location.reload();
 });
